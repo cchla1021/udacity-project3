@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: chrisking99/metrics-dashboard-backend
+        image: cchla1021/metrics-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
