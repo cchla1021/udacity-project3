@@ -19,6 +19,9 @@ logging.info("Starting Backend")
 
 ## jaeger
 def config_tracer():
+    logging.getLogger('').handlers = []
+    logging.basicConfig(format='%(message)s', level=logging.DEBUG)
+
     config = Config(
            config = {
                 'sampler': {
@@ -28,8 +31,6 @@ def config_tracer():
             'logging': True,
         },
         service_name="service_backend",
-        validate=True,
-        metrics_factory=PrometheusMetricsFactory(service_name_label="service_backend")
     )
     return config.initialize_tracer()
 
