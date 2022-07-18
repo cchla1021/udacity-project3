@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: agwcolor/monitoring-backend:latest
+          image: cchla1021/monitoring-backend:latest
           imagePullPolicy: Always
           ports:
           - name: backendport

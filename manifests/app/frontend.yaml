@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: agwcolor/monitoring-frontend:latest
+          image: cchla1021/monitoring-frontend:latest
           imagePullPolicy: Always
           ports:
           - name: frontendport
