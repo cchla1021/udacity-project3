@@ -1,0 +1,23 @@
+spec:
+  template:
+    spec:
+      containers:
+      - name: jaeger-operator
+        image: jaegertracing/jaeger-operator:1.27.0
+        ports:
+        - containerPort: 8383
+          name: http-metrics
+        - containerPort: 8686
+          name: cr-metrics
+        args: ["start"]
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        env:
+        - name: WATCH_NAMESPACE
+          value: "default,observability,monitoring"
