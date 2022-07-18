@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: chrisking99/metrics-dashboard-frontend
+        image: cchla1021/metrics-frontend
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
