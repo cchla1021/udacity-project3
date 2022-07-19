@@ -34,7 +34,7 @@ jobs:
           file: ./reference-app/backend/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: cchla1021/monitoring-backend:latest
+          tags: cchla1021/metrics-backend:latest
           
       -
         name: Build and push Frontend Docker images
@@ -44,4 +44,4 @@ jobs:
           file: ./reference-app/frontend/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: cchla1021/monitoring-frontend:latest
+          tags: cchla1021/metrics-frontend:latest

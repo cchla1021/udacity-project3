@@ -48,7 +48,7 @@ def init_tracer(service_name="backend-service"):
             },
             'logging': True,
             'local_agent': {
-                'reporting_host': 'my-traces-agent.observability.svc.cluster.local'
+                'reporting_host': 'my-traces-query.default.svc.cluster.local'
             }
         },
         service_name=service_name,
