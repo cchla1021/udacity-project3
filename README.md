@@ -1,16 +1,6 @@
 **Note:** For the screenshots, you can store all of your answer images in the `answer-img` directory.
 
-## Installing Grafana and Prometheus
-```
-kubectl create namespace monitoring
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-# helm repo add stable https://kubernetes-charts.storage.googleapis.com # this is deprecated
-helm repo add stable https://charts.helm.sh/stable
-helm repo update
-helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --kubeconfig /etc/rancher/k3s/k3s.yaml
-```
-
-# Setup/execute the Jaeger, Prometheus, all services, etc. 
+## Setup/execute the Grafana, Jaeger, Prometheus, etc. 
 ```
 kubectl create namespace monitoring
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
