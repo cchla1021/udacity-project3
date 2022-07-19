@@ -83,8 +83,8 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
      sudo zypper --non-interactive install apparmor-parser
-	 sudo zypper --non-interactive install helm
-	 sudo zypper --non-interactive install git
+     sudo zypper --non-interactive install helm
+     sudo zypper --non-interactive install git
   SHELL
 
   args = []
