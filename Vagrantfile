@@ -37,6 +37,11 @@ Vagrant.configure("2") do |config|
       sudo zypper --non-interactive install bzip2
       sudo zypper --non-interactive install etcd
       sudo zypper --non-interactive install apparmor-parser
+	  sudo zypper --non-interactive install docker
+	  sudo systemctl start docker
+	  sudo systemctl enable docker
+	  sudo zypper --non-interactive install helm
+	  sudo zypper --non-interactive install git
       curl -sfL https://get.k3s.io | sh -
     SHELL
     # config.vm.synced_folder "./", "/vagrant", type: "virtualbox", create: true
