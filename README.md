@@ -35,10 +35,10 @@ kubectl port-forward svc/backend --address 0.0.0.0 8080:8081
 
 ## Configuring Jaeger Data Source on Grafana
 ```
-export namespace=observability
+export namespace=default
 export jaeger_version=v1.28.0
-ingress_name=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].metadata.name}'); \
-ingress_port=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].spec.defaultBackend.service.port.number}'); \
+ingress_name=$(kubectl get ingress -o jsonpath='{.items[0].metadata.name}'); \
+ingress_port=$(kubectl get ingress -o jsonpath='{.items[0].spec.defaultBackend.service.port.number}'); \
 echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
 ```
 
