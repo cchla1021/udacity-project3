@@ -1,145 +1,128 @@
 **Note:** For the screenshots, you can store all of your answer images in the `answer-img` directory.
 
-## Verify the monitoring installation
+## Installing Grafana and Prometheus
+```
+kubectl create namespace monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo add stable https://kubernetes-charts.storage.googleapis.com # this is deprecated
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --kubeconfig /etc/rancher/k3s/k3s.yaml
+```
 
-*TODO: 1* run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation.  NOTE: As instructed by serveral Knowledgebase posts, I put all of the Jaeger services into the `default` namespace along with the apps themselves. Otherwise Jaeger cannot see the apps.  That is why Jaeger is not in Observability.  (see : below in default namespace where the apps are located) ![default ns](/answer-img/1_PodsServices_Note_JaegerInDefault.png)
+## Commands for Exposing Grafana - Resolve Unable to access project on localhost:3000
+```
+kubectl patch svc "prometheus-grafana" --namespace "monitoring" -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl --namespace monitoring port-forward svc/prometheus-grafana --address 0.0.0.0 3000:80
+```
+
+## Commands for Exposing the application
+```
+kubectl patch svc "frontend-service" -p '{"spec": {"type": "LoadBalancer"}}'
+kubectl port-forward svc/frontend-service --address 0.0.0.0 8080:8080
+```
+
+# Setup the Jaeger and Prometheus source 
+```
+export jaeger_version=v1.28.0
+mkdir -p jaeger-tracing
+
+cat >> jaeger-tracing/jaeger.yaml <<EOF
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+ name: my-traces
+EOF
+
+kubectl apply -f jaeger-tracing/jaeger.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/crds/jaegertracing.io_jaegers_crd.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/service_account.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role_binding.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/operator.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role_binding.yaml
+
+# Use the command below to deploy Nginx ingress-controller in the K8s cluster
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.3/deploy/static/provider/cloud/deploy.yaml
+kubectl get svc -l app.kubernetes.io/instance=my-traces
+
+# Run port-forward command to map local port 16686 to service/my-traces-query port 16686
+kubectl port-forward svc/my-traces-query --address 0.0.0.0 16686:16686
+
+kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus --address 0.0.0.0 9090:9090
+```
+
+## Configuring Jaeger Data Source on Grafana
+```
+export namespace=observability
+export jaeger_version=v1.28.0
+ingress_name=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].metadata.name}'); \
+ingress_port=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].spec.defaultBackend.service.port.number}'); \
+echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
+```
+
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger-grafana.PNG)
+Copy the echoed URL (including port number) above and open Grafana UI to add the data source, ensure that the link is successful by selecting save&test                 
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger-datasource.PNG)
+
+## Verify the monitoring installation
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/verify-installation.PNG)
 
 ## Setup the Jaeger and Prometheus source
-*TODO: Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana. ![grafana prom datasource](/answer-img/2a_grafana_prometheus_datasource.png) | ![grafana home page](/answer-img/2b_grafana_home_screen.png) 
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Setup-the-Jaeger-and-Prometheus-source.PNG)
+
+Reference link: How To Configure Jaeger Data Source On Grafana And Debug Network Issues With Bind-utilities([https://blog.mphomphego.co.za/blog/2021/07/25/How-to-configure-Jaeger-Data-source-on-Grafana-and-debug-network-issues-with-Bind-utilities.html#how-to-configure-jaeger-data-source-on-grafana-and-debug-network-issues-with-bind-utilities])
 
 ## Create a Basic Dashboard
-*TODO:* ![prometheus basic dashboard](/answer-img/3_basic_dashboard_showing_prometheus.png) : Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
+Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Grafana-Prometheus-Basic-Dashboard.PNG)
 
 ## Describe SLO/SLI
-*TODO:* Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
+A Service-Level Objectives is a measurable goal set by the SRE team to ensure a standard level of performance during a specified period of time. Once we have a clear definition and objective for the level of performance we want to deliver then Service-Level Indicators (SLIs) comes in to do actual measurement of performance we defined in the SLO. In this case, SLI would be the actual measurement of the uptime. Perhaps during that year, you actually achieved 99.5% uptime and request-response time or 97.3% uptime and request response time. These measurements are SLI. Notice that the above example is a ratio which is a measurement to a given amount of time (the measured uptime and request-response time per year).
 
-Actual *monthly uptime* and *request response time* are SLIs (service level indicators, or metrics) that can be used to determine if an SLO has been met. For example, let's say that our SLO for *monthly uptime* is at least 99.99% per month, and our SLO for *request response time* is less than 3 seconds on average.
+## Creating SLI metrics.
+It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
+A Service-Level Indicator (SLI) is a specific metric used to measure the performance of a service. These metrics are relevant and built around the four signals (latency, Error Rate, Traffic, and Saturation)
 
-The following general SLIs can have a bearing on whether the SLOs will be met directly or indirectly. These can be further broken down and visualized via specific metrics. 
-- % uptime that a service is active
-- Failure rate for a service. This could potentially affect monthly uptime.
-- Latency - How long does it take to respond to a request? This directly measures the request response time SLI.
-- Saturation - how heavy a load the servers have (saturation). This could cause downtime and slow response times
-- Traffic - how much traffic are the servers getting? Perhaps there are times when servers get a spike in traffic. This could directly impact response times and uptime as well.
+* Latency: Latency is important to monitor since this will tell the developers how long it takes to response to a request and usually measured in millisecond (ms).
+* Error Rate: The errors often expressed as a fraction of all requests received. (eg. percentage of HTTP 500 responses).
+* Traffic: Network is important to monitor since the developer can see how much bandwith is required for a service to function. With this data the developer can look for ways to decrese the amount of bandwith required.
+* Uptime: Uptime is important to monitor so that developers know the percentage of the time the service is running. If it drops below a certain point this can be cause for concern and if it was not tracked it would be hard to tell how the service is handling.
 
-
-## Creating SLI (KPI) metrics.
-*TODO:* It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs.
-
-**4 Golden Signals to measure service level** 
-
-- *Latency* — request time (in ms)
-- *Traffic* — how stressed is the system (based on no of HTTP requests/sec)
-- *Errors* — how many failed HTTP responses are there? 4xx & 5xx errors.
-- *Saturation* — is too much memory or CPI being used compared to the the overall capacity of a service or its configuration?
-
-** SLIs to measure the 4 Golden Signals. These SLIs can overlap in terms of what signals are affecting them. To determine what is affecting an SLI, further research into tracing on the apps will need to be done, as well as analyzing dependencies in the cluster and its environment. They are all interdependent.
-- Measure by response type and service: Flask HTTP requests status 200, 500, 400 (Errors)
-- Failed responses per second (Errors, Traffic, Saturation)
-- Uptime: frontend, trial, backend (Latency, Traffic, Saturation, Errors)
-- Pods health: Pods not ready (Latency / Errors)
-- Pods health: Pod restarts by namespace (Could be caused by any number of things : Errors in applications, traffic)
-- Average Response time (Latency, Traffic, Saturation)
 
 ## Create a Dashboard to measure our SLIs
-*TODO:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot. (![400 & 500 errors](/answer-img/4_Uptime_4xx_5xx_errors_V2.png))
+Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
 
 ## Tracing our Flask App
-*TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here.
-(![jaeger code](/answer-img/5_JaegerTraceScreenshot_backend.png) | ![jaeger trace](/answer-img/5_JaegerTraceCode.png))
+*TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here. Also provide a (screenshot) sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
 
 ## Jaeger in Dashboards
-*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here. (![jaeger in grafana](/answer-img/6_JaegerInDashboard.png))
-
+*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
 
 ## Report Error
-*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue. (![jaeger in grafana](/answer-img/6b_TroubleTicketTrace.png))
-
+*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
 
 TROUBLE TICKET
 
-Name: 500 Error on backend/app/app.py
+Name:
 
-Date: November 23 2021, 13:24:50
+Date:
 
-Subject: 500 Error in my-api endpoint, failed to resolve
+Subject:
 
-Affected Area: File "/app/app.py", line 107, in my_api
-    answer = something # This will create an error
+Affected Area:
 
-Severity: Severe
+Severity:
 
-Description:  class 'NameError' error  - name 'something' is not defined
+Description:
 
 
 ## Creating SLIs and SLOs
-*TODO:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name three SLIs that you would use to measure the success of this SLO.
-1. Latency
-2. Errors
-3. Saturation
-
+*TODO:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name four SLIs that you would use to measure the success of this SLO.
 
 ## Building KPIs for our plan
-
-*TODO*: Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will make a dashboard for this, but first write them down here:
-
-### 2-3 KPIs per SLI
-
-**Latency**
-- request time (in ms) for successful requests
-- request time (in ms) for failed requests
-- round trip request time in network - using ping and traceroute
-
-**Errors** : It is important to understand what kind of errors are happening in the application. This can be done with Jaeger Tracing.
-- 500 errors - 500 errors are more severe: the application is unable to start or completely crashes during execution of a request.
-- 400 errors - 404 errors are less severe but also need urgent attention.
-- What percentage of overall requests result in 200 as opposed to 400 or 500 erros
-
-**Saturation**
-- % CPU usage allocated per service as configured in yaml for example
-- % CPU usage available on host
-- Total number of requests recived over time. Are there spikes in usage?
-
-### Example PromQL Queries for Some Metrics. Some metrics I was unable to find queries for (ping and traceroute). Others I could not direct 1 - 1 relationships from KPI => PromQL.
-
-**Response types : Flask HTTP requests status 200, 500, 400**
-- sum(flask_http_request_total{container=~"backend|frontend|trial",status=~"500"}) by (status,container)
-- sum(flask_http_request_total{container=~"backend|frontend|trial",status=~"400"}) by (status,container)
-- sum(flask_http_request_total{container=~"backend|frontend|trial",status=~"200"}) by (status,container)
-
-**Failed responses per second**
-- sum(rate(flask_http_request_duration_seconds_count{status!="200"}[30s]))
-
-**Uptime : frontend, trial, backend**
-- sum(up{container=~"frontend"}) by (pod)
-- sum(up{container=~"trial"}) by (pod)
-- sum(up{container=~"backend"}) by (pod)
-
-**Pods health : Pods not ready**
-- sum by (namespace) (kube_pod_status_ready{condition="false"})
-
-**Pods health : Pod restarts by namespace**
-- sum by (namespace)(changes(kube_pod_status_ready{condition="true"}[5m]))
-
-**Average Response time (Latency)**
-- rate(flask_http_request_duration_seconds_sum{status="200"}[1d])/
-rate(flask_http_request_duration_seconds_count{status="200"}[1d])
+*TODO*: Now that we have our SLIs and SLOs, create a list of 2-3 KPIs to accurately measure these metrics as well as a description of why those KPIs were chosen. We will make a dashboard for this, but first write them down here.
 
 ## Final Dashboard
 *TODO*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
-
-Dashboard : See (![Final Dashboard](/answer-img/7_FinalDashboard.png))
-Panels listed are :
-- Flask HTTP request total: Status "200
-- Flask HTTP request exceptions
-- 5xx Errors last 24 hours
-- 4xx Errors last 24 hours
-- Failed responses per second
-- Uptime Frontend Service Last 24 hours
-- Uptime Backend Service Last 24 hours
-- Uptime Trial Service Last 24 hours
-- Pods Per Namespace
-- Pods that were not ready
-- Pod restarts per namespace
-- CPU Usage
-- Latency: Average response time
