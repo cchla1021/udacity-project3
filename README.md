@@ -10,6 +10,48 @@ helm repo update
 helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --kubeconfig /etc/rancher/k3s/k3s.yaml
 ```
 
+# Setup/execute the Jaeger, Prometheus, all services, etc. 
+```
+kubectl create namespace monitoring
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --kubeconfig /etc/rancher/k3s/k3s.yaml
+
+export jaeger_version=v1.28.0
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/crds/jaegertracing.io_jaegers_crd.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/service_account.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role_binding.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/operator.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role.yaml
+kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role_binding.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.3/deploy/static/provider/cloud/deploy.yaml
+
+kubectl apply -f jaeger_crds/
+
+# Run prometheus service
+kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus --address 0.0.0.0 9090:9090
+
+# Run Jaeger operator
+kubectl port-forward svc/my-traces-query --address 0.0.0.0 16686:16686
+ 
+# Run frontend service
+kubectl port-forward svc/frontend --address 0.0.0.0 8080:8083
+
+#Run backend service
+kubectl port-forward svc/backend --address 0.0.0.0 8080:8081
+```
+
+## Configuring Jaeger Data Source on Grafana
+```
+export namespace=observability
+export jaeger_version=v1.28.0
+ingress_name=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].metadata.name}'); \
+ingress_port=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].spec.defaultBackend.service.port.number}'); \
+echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
+```
+
 ## Commands for Exposing Grafana - Resolve Unable to access project on localhost:3000
 ```
 kubectl patch svc "prometheus-grafana" --namespace "monitoring" -p '{"spec": {"type": "LoadBalancer"}}'
@@ -20,46 +62,6 @@ kubectl --namespace monitoring port-forward svc/prometheus-grafana --address 0.0
 ```
 kubectl patch svc "frontend-service" -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl port-forward svc/frontend-service --address 0.0.0.0 8080:8080
-```
-
-# Setup the Jaeger and Prometheus source 
-```
-export jaeger_version=v1.28.0
-mkdir -p jaeger-tracing
-
-cat >> jaeger-tracing/jaeger.yaml <<EOF
-apiVersion: jaegertracing.io/v1
-kind: Jaeger
-metadata:
- name: my-traces
-EOF
-
-kubectl apply -f jaeger-tracing/jaeger.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/crds/jaegertracing.io_jaegers_crd.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/service_account.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/role_binding.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/operator.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role.yaml
-kubectl create -f https://raw.githubusercontent.com/jaegertracing/jaeger-operator/${jaeger_version}/deploy/cluster_role_binding.yaml
-
-# Use the command below to deploy Nginx ingress-controller in the K8s cluster
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.3/deploy/static/provider/cloud/deploy.yaml
-kubectl get svc -l app.kubernetes.io/instance=my-traces
-
-# Run port-forward command to map local port 16686 to service/my-traces-query port 16686
-kubectl port-forward svc/my-traces-query --address 0.0.0.0 16686:16686
-
-kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus --address 0.0.0.0 9090:9090
-```
-
-## Configuring Jaeger Data Source on Grafana
-```
-export namespace=observability
-export jaeger_version=v1.28.0
-ingress_name=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].metadata.name}'); \
-ingress_port=$(kubectl get -n ${namespace} ingress -o jsonpath='{.items[0].spec.defaultBackend.service.port.number}'); \
-echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
 ```
 
 ![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger-grafana.PNG)
