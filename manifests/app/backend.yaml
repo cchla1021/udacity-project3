@@ -8,7 +8,7 @@ metadata:
     prometheus.io/path: /metrics
     prometheus.io/port: frontend
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: backend
