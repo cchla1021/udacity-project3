@@ -75,13 +75,11 @@ A Service-Level Objectives is a measurable goal set by the SRE team to ensure a 
 
 ## Creating SLI metrics.
 It is important to know why we want to measure certain metrics for our customer. Describe in detail 5 metrics to measure these SLIs. 
-A Service-Level Indicator (SLI) is a specific metric used to measure the performance of a service. These metrics are relevant and built around the four signals (latency, Error Rate, Traffic, and Saturation)
-
-* Latency: Latency is important to monitor since this will tell the developers how long it takes to response to a request and usually measured in millisecond (ms).
-* Error Rate: The errors often expressed as a fraction of all requests received. (eg. percentage of HTTP 500 responses).
-* Traffic: Network is important to monitor since the developer can see how much bandwith is required for a service to function. With this data the developer can look for ways to decrese the amount of bandwith required.
-* Uptime: Uptime is important to monitor so that developers know the percentage of the time the service is running. If it drops below a certain point this can be cause for concern and if it was not tracked it would be hard to tell how the service is handling.
-
+A Service-Level Indicator (SLI) is a specific metric used to measure the performance of a service. These metrics are relevant and built around the the following four golden signals (latency, Errors, Traffic, and Saturation)
+* Latency — request time (in ms)
+* Errors — how many failed HTTP responses are there? 4xx & 5xx errors.
+* Traffic — how stressed is the system (based on no of HTTP requests/sec)
+* Saturation — is too much memory or CPI being used compared to the the overall capacity of a service or its configuration?
 
 ## Create a Dashboard to measure our SLIs
 Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
@@ -92,11 +90,11 @@ Jaeger span to measure the processes on the backend. Screenshots sample Python f
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing_span.PNG)
 
 ## Jaeger in Dashboards
-*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
+Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-Jaeger.png)
 
 ## Report Error
-*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
+Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
 
 TROUBLE TICKET
 
