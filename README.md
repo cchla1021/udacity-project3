@@ -53,11 +53,8 @@ kubectl --namespace monitoring port-forward svc/prometheus-grafana --address 0.0
 kubectl patch svc "frontend-service" -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl port-forward svc/frontend-service --address 0.0.0.0 8080:8080
 ```
-```
-# Run Jaeger operator
-kubectl port-forward svc/my-traces-query --address 0.0.0.0 16686:16686
-```
-Copy the URL (including port number) above and open Grafana UI to add the data source, ensure that the link is successful by selecting save&test                 
+
+Open Grafana UI to add the data source, ensure that the link is successful by selecting save&test                 
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger-datasource.PNG)
 
 ## Verify the monitoring installation
