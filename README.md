@@ -89,11 +89,11 @@ Create a dashboard to measure the uptime of the frontend and backend services We
 ## Tracing our Flask App
 Jaeger span to measure the processes on the backend. Screenshots sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing.png)![pods]
-![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing_code.png)![pods]
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing_span.png)![pods]
 
 ## Jaeger in Dashboards
 *TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
-![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-Jaeger.png.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-Jaeger.png)
 
 ## Report Error
 *TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
