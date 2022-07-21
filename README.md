@@ -45,7 +45,7 @@ echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
 ## Commands for Exposing Grafana - Resolve Unable to access project on localhost:3000
 ```
 kubectl patch svc "prometheus-grafana" --namespace "monitoring" -p '{"spec": {"type": "LoadBalancer"}}'
-kubectl --namespace monitoring port-forward svc/prometheus-grafana --address 0.0.0.0 3000:80
+kubectl --namespace monitoring port-forward svc/prometheus-grafana --address 0.0.0.0 3000:3000
 ```
 
 ## Commands for Exposing the application
