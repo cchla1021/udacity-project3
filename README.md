@@ -54,21 +54,21 @@ kubectl patch svc "frontend-service" -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl port-forward svc/frontend-service --address 0.0.0.0 8080:8080
 ```
 
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger-grafana.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger-grafana.PNG)
 Copy the echoed URL (including port number) above and open Grafana UI to add the data source, ensure that the link is successful by selecting save&test                 
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger-datasource.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger-datasource.PNG)
 
 ## Verify the monitoring installation
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/verify-installation.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/verify-installation.PNG)
 
 ## Setup the Jaeger and Prometheus source
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Setup-the-Jaeger-and-Prometheus-source.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Setup-the-Jaeger-and-Prometheus-source.PNG)
 
 Reference link: How To Configure Jaeger Data Source On Grafana And Debug Network Issues With Bind-utilities([https://blog.mphomphego.co.za/blog/2021/07/25/How-to-configure-Jaeger-Data-source-on-Grafana-and-debug-network-issues-with-Bind-utilities.html#how-to-configure-jaeger-data-source-on-grafana-and-debug-network-issues-with-bind-utilities])
 
 ## Create a Basic Dashboard
 Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Grafana-Prometheus-Basic-Dashboard.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-Prometheus-Basic-Dashboard.PNG)
 
 ## Describe SLO/SLI
 A Service-Level Objectives is a measurable goal set by the SRE team to ensure a standard level of performance during a specified period of time. Once we have a clear definition and objective for the level of performance we want to deliver then Service-Level Indicators (SLIs) comes in to do actual measurement of performance we defined in the SLO. In this case, SLI would be the actual measurement of the uptime. Perhaps during that year, you actually achieved 99.5% uptime and request-response time or 97.3% uptime and request response time. These measurements are SLI. Notice that the above example is a ratio which is a measurement to a given amount of time (the measured uptime and request-response time per year).
@@ -88,12 +88,12 @@ Create a dashboard to measure the uptime of the frontend and backend services We
 
 ## Tracing our Flask App
 Jaeger span to measure the processes on the backend. Screenshots sample Python file containing a trace and span code used to perform Jaeger traces on the backend service.
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger_flask_tracing.png)![pods]
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/jaeger_flask_tracing_code.png)![pods]
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing.png)![pods]
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger_flask_tracing_code.png)![pods]
 
 ## Jaeger in Dashboards
 *TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Grafana-Jaeger.png.PNG)
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-Jaeger.png.PNG)
 
 ## Report Error
 *TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
