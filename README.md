@@ -42,7 +42,7 @@ ingress_port=$(kubectl get ingress -o jsonpath='{.items[0].spec.defaultBackend.s
 echo -e "\n\n${ingress_name}.${namespace}.svc.cluster.local:${ingress_port}"
 ```
 
-## Commands for Exposing Grafana - Resolve Unable to access project on localhost:3000
+## Commands for Exposing Grafana
 ```
 kubectl --namespace monitoring port-forward $(kubectl get pods -n monitoring | grep "prometheus-grafana*" | awk '{print $1}') --address 0.0.0.0 3000:3000
 ```
