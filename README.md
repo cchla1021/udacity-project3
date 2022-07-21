@@ -91,7 +91,7 @@ Create a dashboard to measure the uptime of the frontend and backend services We
 
 ## Jaeger in Dashboards
 *TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
-![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/grafana-jaeger.PNG)
+![pods](https://github.com/cchla1021/Project_Starter_Files-Building_a_Metrics_Dashboard/blob/main/answer-img/Grafana-Jaeger.png.PNG)
 
 ## Report Error
 *TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue also include a screenshot of the tracer span to demonstrate how we can user a tracer to locate errors easily.
