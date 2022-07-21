@@ -54,7 +54,6 @@ kubectl patch svc "frontend-service" -p '{"spec": {"type": "LoadBalancer"}}'
 kubectl port-forward svc/frontend-service --address 0.0.0.0 8080:8080
 ```
 
-![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger-grafana.PNG)
 Copy the echoed URL (including port number) above and open Grafana UI to add the data source, ensure that the link is successful by selecting save&test                 
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/jaeger-datasource.PNG)
 
