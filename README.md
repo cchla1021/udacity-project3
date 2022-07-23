@@ -113,7 +113,7 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
 *TODO:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name four SLIs that you would use to measure the success of this SLO.
 
 ## Building KPIs for our plan
-* Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will make a dashboard for this, but first write them down here.  
+* Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will build a grafana dashboard for the following inspection:  
    - Latency: Response time.  
    - Failure rate: Errors per second / response rate per second.    
    - Uptime: Sucessful requests during pod uptime.  
