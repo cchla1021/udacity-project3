@@ -95,29 +95,37 @@ mongo = PyMongo(app)
 @app.route('/')
 @endpoint_counter
 def homepage():
-    with tracer.start_active_span('home-page'):
-        answer = "I'm on the home page"
+    with tracer.start_active_span('homepage-span') as span:
+        answer = "This is the backend home page"
+        span.set_tag('homepage-span','95')
         return jsonify(response=answer)
 
 
 @app.route('/api')
 @endpoint_counter
 def my_api():
-    with tracer.start_span('my-api'):
-        answer = something # This will create an error
+    with tracer.start_span('myapi-span') as span:
+        span.set_tag('myapi-span','90')
+        answer = "my api span page!!!"
         return jsonify(response=answer)
 
 @app.route('/star', methods=['POST'])
 @endpoint_counter
 def add_star():
-    with tracer.start_span('add star'):
-        star = mongo.db.stars
-        name = request.json['name']
-        distance = request.json['distance']
-        star_id = star.insert({'name': name, 'distance': distance})
-        new_star = star.find_one({'_id': star_id })
-        output = {'name' : new_star['name'], 'distance' : new_star['distance']}
-        return jsonify({'result' : output})
+    with tracer.start_span('star_sppan') as span:
+        span.set_tag('star-tag',80)
+        try:
+           star = mongo.db.stars
+           name = request.json['name']
+           distance = request.json['distance']
+           star_id = star.insert({'name': name, 'distance': distance})
+           new_star = star.find_one({'_id': star_id })
+           output = {'name' : new_star['name'], 'distance' : new_star['distance']}
+           return jsonify({'result' : output})
+        except Exception as e:
+           logger.error(f"unable to add a star")
+           span.set_tag("http.status_code", "500")
+           print(e)
 
 class InvalidUsage(Exception):
     status_code = 400
