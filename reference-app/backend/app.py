@@ -96,8 +96,8 @@ mongo = PyMongo(app)
 @endpoint_counter
 def homepage():
     with tracer.start_active_span('homepage-span') as span:
-        answer = "This is the backend home page"
         span.set_tag('homepage-span','95')
+        answer = "This is the backend home page!!!"
         return jsonify(response=answer)
 
 
