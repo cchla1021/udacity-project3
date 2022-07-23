@@ -102,7 +102,7 @@ Date: 7/23/2022
 
 Subject: MongoDB access failed
 
-Affected Area: Backend star 
+Affected Area: Backend star endpoint
 
 Severity: Critical
 
