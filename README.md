@@ -96,17 +96,17 @@ Using the template below, write a trouble ticket for the developers, to explain 
 
 TROUBLE TICKET
 
-Name:
+Name: The method is not allowed for the requested URL - Status Code 405
 
-Date:
+Date: 7/23/2022
 
-Subject:
+Subject: MongoDB access failed
 
-Affected Area:
+Affected Area: Backend star 
 
-Severity:
+Severity: Critical
 
-Description:
+Description: The "/star" endpoint throws 405 error which is caused by the mongodb://example-mongodb-svc.default.svc.cluster.local:27017/example-mongodb URL is not exist in the cluster. Need the MongoDB URL available for the cluster.
 
 
 ## Creating SLIs and SLOs
