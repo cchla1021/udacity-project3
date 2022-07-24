@@ -124,6 +124,7 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
    - Resource capcity KPI: CPU, RAM usage per pod.
    
 ## Final Dashboard
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Final-Dashboard.PNG)
 * Panels:
    - Uptime Frontend Service Last 24 Hours
    - Uptime Backend Last 24 Hours
