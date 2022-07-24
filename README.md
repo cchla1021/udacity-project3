@@ -60,6 +60,7 @@ Open Grafana UI to add the data source, ensure that the link is successful by se
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/verify-installation.PNG)
 
 ## Setup the Jaeger and Prometheus source
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Grafana-HomePage.PNG)
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Setup-the-Jaeger-and-Prometheus-source.PNG)
 
 Reference link: How To Configure Jaeger Data Source On Grafana And Debug Network Issues With Bind-utilities([https://blog.mphomphego.co.za/blog/2021/07/25/How-to-configure-Jaeger-Data-source-on-Grafana-and-debug-network-issues-with-Bind-utilities.html#how-to-configure-jaeger-data-source-on-grafana-and-debug-network-issues-with-bind-utilities])
