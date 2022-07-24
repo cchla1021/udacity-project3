@@ -79,6 +79,7 @@ A Service-Level Indicator (SLI) is a specific metric used to measure the perform
 * Errors — how many failed HTTP responses are there? 4xx & 5xx errors.
 * Traffic — how stressed is the system (based on no of HTTP requests/sec)
 * Saturation — is too much memory or CPI being used compared to the the overall capacity of a service or its configuration?
+![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/Final-Dashboard.PNG)
 
 ## Create a Dashboard to measure our SLIs
 Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
