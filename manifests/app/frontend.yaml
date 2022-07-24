@@ -41,7 +41,7 @@ spec:
   ports:
     - name: frontend
       protocol: TCP
-      port: 8080
+      port: 8083
       targetPort: frontendport
   type: LoadBalancer
 ---
