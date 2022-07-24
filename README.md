@@ -124,4 +124,13 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
    - Resource capcity KPI: CPU, RAM usage per pod.
    
 ## Final Dashboard
-*TODO*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+* Panels:
+   - Uptime Frontend Service Last 24 Hours
+   - Uptime Backend Last 24 Hours
+   - Flask HTTP request Status Code 200 total
+   - 40X Errors Last 24 Hours
+   - 500 Error Last 24 Hours
+   - Average Response Time (Latency)
+   - Flask HTTP request Status Code 500 Total
+   - Pods health - Pod restarts by namespace
+   - Pods health - Pods not ready
