@@ -133,5 +133,6 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
    - Pods that are not ready - Pods status not running 
    - Pods Per Namespace
    - Status code 4XX/5XX the amount of failed requests per second
-   - Average Response Time (Latency) - The average HTTP response time.
+   - Average Response Time (Latency) - Average HTTP request/response time round trip.
    - Failed response per 30 second - Failed status code is not eqal "200"
+   - CPU usage avaialble on the host
