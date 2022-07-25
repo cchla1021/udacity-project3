@@ -119,11 +119,10 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
 
 ## Building KPIs for our plan
 * Now that we have our SLIs and SLOs, create KPIs to accurately measure the following metrics:  
-   - Latency KPI: Response time.  
-   - Failure rate KPI: Errors per second / response rate per second.    
-   - Uptime KPI: Sucessful requests during pod uptime.  
-   - Network capcity KPI: successful request per second /  request per second.  
-   - Resource capcity KPI: CPU, RAM usage per pod.
+   - Latency KPI: Average Response time.  
+   - Failure rate KPI: # of 5XX & 4XX Errors per 30 second / response rate per 30 seconds.    
+   - Uptime services KPI for Backend and Frontend.  
+   - Resource capcity KPI: CPU & RAM utilization.
    
 ## Final Dashboard
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/FinalDashboard.PNG)
