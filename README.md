@@ -127,12 +127,11 @@ Description: The "/star" endpoint throws 405 error which is caused by the mongod
 ## Final Dashboard
 ![pods](https://github.com/cchla1021/udacity-project3/blob/main/answer-img/FinalDashboard.PNG)
 * Panels:
-   - Flask HTTP request total: Status "200"
+   - Flask HTTP request total: Status "200" - the amount of success HTTP requests per second
    - Uptime Backend Last 24 Hours
    - Uptime Frontend Last 24 Hours
-   - Pods that are not ready
-   - Latency: Average response time
+   - Pods that are not ready - Pods status not running 
    - Pods Per Namespace
-   - 4XX/5XXError Last 24 Hours
-   - Average Response Time (Latency)
-   - Failed response per 30 second
+   - Status code 4XX/5XX the amount of failed requests per second
+   - Average Response Time (Latency) - The average HTTP response time.
+   - Failed response per 30 second - Failed status code is not eqal "200"
